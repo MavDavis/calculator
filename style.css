@@ -1,0 +1,108 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-size: 1.5rem;
+    font-family: Helvetica, sans-serif, Arial;
+}
+
+.container {
+    max-width: 500px;
+    margin: 15% auto;
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: 0.2px solid #333;
+    overflow: hidden;
+}
+
+.inputarea {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    padding: 10px;
+    word-break: break-all;
+    word-wrap: break-word;
+    color: #fff;
+    width: 100%;
+    height: 50px;
+    background: #000;
+}
+
+.current-operand {
+    color: rgba(225, 225, 225, 0.75);
+}
+
+.container-head,
+.digit,
+.numbers {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.bg {
+    background: #ccc;
+}
+
+.head-item {
+    width: 25%;
+    border: 1px solid #ccc;
+    background: #eee;
+    text-align: center;
+    padding: 6px 0;
+    cursor: pointer;
+}
+
+.num {
+    cursor: pointer;
+    width: 33.3333333333%;
+    border: 1px solid #ccc;
+    padding: 10px 0;
+}
+
+.numbers {
+    width: 75%;
+    background: #fff;
+    text-align: center;
+}
+
+.equal {
+    width: 25%;
+    border: none;
+    /* background: orangered; */
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.equal-p,
+.del {
+    cursor: pointer;
+    width: 100%;
+    height: 50%;
+    background: orangered;
+    margin: auto;
+    border: none;
+    outline: none;
+}
+
+.del {
+    background: #333;
+    color: #fff;
+    font-size: 0.7rem;
+}
+
+@media (max-width: 500px) {
+    body {
+        font-size: 1rem;
+    }
+    .container {
+        max-width: 300px;
+    }
+}
