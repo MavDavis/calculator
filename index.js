@@ -1,35 +1,96 @@
 let refresh = document.getElementById("refresh");
-let multiply = document.getElementById("multiply");
-let plus = document.getElementById("plus");
-let subtract = document.getElementById("subtract");
+let operators = document.querySelectorAll(".head-item");
 let number = document.getElementById("numbers");
 let equal = document.getElementById("equal");
 let num = document.querySelectorAll(".num");
+let allClear = document.getElementById("refresh");
 let outputSoln = document.getElementById("show-soln");
-const numberCall = document.querySelectorAll("button").forEach((btn) => {
-  btn.addEventListener("click", (event) => {
-    event.target.classList.add("bg");
-    setTimeout(() => {
-      event.target.classList.remove("bg");
-    }, 70);
-    let num = event.target;
+let previousOperandTextElement = document.querySelector(".previous-operand");
+let currentOperandTextElement = document.querySelector(".current-operand");
 
-    if (num.classList.contains("refresh")) {
-      outputSoln.innerText = "0";
+class Calculator {
+    constructor(previousOperandTextElement, currentOperandTextElement) {
+        this.previousOperandTextElement = previousOperandTextElement;
+        this.currentOperandTextElement = currentOperandTextElement;
+        this.clear();
     }
-    if (num.classList.contains("nums")) {
-      let firstInput = outputSoln.innerText + num.innerText;
-      outputSoln.innerText = firstInput;
-      if (num.innerText === "." && firstInput.includes(".")) {
-        num.disabled = true;
-        num.style.background = "#eee";
-      } else if (
-        num.innerText === "." &&
-        firstInput == "0" &&
-        !firstInput.includes(".")
-      ) {
-        num.disabled = false;
-      }
+    clear() {
+        this.currentOperand = "";
+        this.previousOperand = "";
+        this.operation = undefined;
     }
-  });
+    delete() {}
+    appendNumber(number) {
+        if (number === "." && this.currentOperand.includes(".")) return;
+        this.currentOperand += number.toString();
+    }
+    chooseOperation(operation) {
+        this.operation = operation;
+        if (this.currentOperand === "") return;
+        if (this.previousOperand !== " ") {
+            this.compute();
+        }
+        this.previousOperand = this.currentOperand += this.operation;
+        this.currentOperand = " ";
+    }
+    compute() {
+        let calc;
+        const prev = parseFloat(this.previousOperand);
+        const current = parseFloat(this.currentOperand);
+        if (prev == "" || current == "") return;
+        switch (this.operation) {
+            case "+":
+                calc = prev + current;
+                break;
+            case "-":
+                calc = prev - current;
+                break;
+            case "x":
+                calc = prev * current;
+                break;
+            case "'/,":
+                calc = prev / current;
+                break;
+            default:
+                return;
+        }
+        this.currentOperand = calc;
+        this.operation = undefined;
+        this.previousOperand = "";
+    }
+    updateDisplay() {
+        this.previousOperandTextElement.innerText = this.previousOperand;
+        this.currentOperandTextElement.innerText = this.currentOperand;
+        //     if (this.operation != null) {
+        //         this.previousOperandTextElement.innerText =
+        //          `${this.getDisplayNumber(
+        //     this.previousOperand
+        //   )} ${this.operation}`;
+        //     }
+    }
+}
+const calculator = new Calculator(
+    previousOperandTextElement,
+    currentOperandTextElement
+);
+
+num.forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+        event.target.classList.add("bg");
+        setTimeout(() => {
+            event.target.classList.remove("bg");
+        }, 70);
+        calculator.appendNumber(btn.innerText);
+        calculator.updateDisplay();
+    });
+});
+operators.forEach((operatorbtn) => {
+    operatorbtn.addEventListener("click", () => {
+        calculator.chooseOperation(operatorbtn.innerText);
+        calculator.updateDisplay();
+    });
+});
+equal.addEventListener("click", () => {
+    calculator.compute();
+    calculator.updateDisplay();
 });
