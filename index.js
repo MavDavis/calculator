@@ -18,18 +18,16 @@ const numberCall = document.querySelectorAll("button").forEach((btn) => {
       outputSoln.innerText = "0";
     }
     if (num.classList.contains("nums")) {
-      let firstInput = outputSoln.innerText + num.innerText;
-      outputSoln.innerText = firstInput;
-      if (num.innerText === "." && firstInput.includes(".")) {
-        num.disabled = true;
-        num.style.background = "#eee";
-      } else if (
-        num.innerText === "." &&
-        firstInput == "0" &&
-        !firstInput.includes(".")
-      ) {
-        num.disabled = false;
+      //let firstInput = outputSoln.innerText + num.innerText;
+	let inp = num.innerText
+      //outputSoln.innerText = firstInput;
+      if (inp === "." && (outputSoln.innerText.includes(".")||outputSoln.innerText==undefined||outputSoln.innerText.length<=0) ) {
+        return
+      } else  {
+        outputSoln.innerText+=inp
       }
     }
+
+
   });
 });
