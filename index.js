@@ -1,8 +1,8 @@
 let refresh = document.getElementById("refresh");
 let operators = document.querySelectorAll(".head-item");
-let number = document.getElementById("numbers");
+let deleteBtn = document.querySelector(".del");
 let equal = document.getElementById("equal");
-let num = document.querySelectorAll(".num");
+let num = document.querySelectorAll(".nums");
 let allClear = document.getElementById("refresh");
 let outputSoln = document.getElementById("show-soln");
 let previousOperandTextElement = document.querySelector(".previous-operand");
@@ -19,24 +19,27 @@ class Calculator {
         this.previousOperand = "";
         this.operation = undefined;
     }
-    delete() {}
+    delete() {
+        this.currentOperand = this.currentOperand.toString().slice(0, -1);
+    }
     appendNumber(number) {
         if (number === "." && this.currentOperand.includes(".")) return;
         this.currentOperand += number.toString();
     }
     chooseOperation(operation) {
-        this.operation = operation;
         if (this.currentOperand === "") return;
         if (this.previousOperand !== " ") {
             this.compute();
         }
-        this.previousOperand = this.currentOperand += this.operation;
-        this.currentOperand = " ";
+        this.operation = operation;
+        this.previousOperand = this.currentOperand;
+        this.currentOperand = "";
     }
     compute() {
         let calc;
         const prev = parseFloat(this.previousOperand);
         const current = parseFloat(this.currentOperand);
+
         if (prev == "" || current == "") return;
         switch (this.operation) {
             case "+":
@@ -59,14 +62,34 @@ class Calculator {
         this.previousOperand = "";
     }
     updateDisplay() {
-        this.previousOperandTextElement.innerText = this.previousOperand;
-        this.currentOperandTextElement.innerText = this.currentOperand;
-        //     if (this.operation != null) {
-        //         this.previousOperandTextElement.innerText =
-        //          `${this.getDisplayNumber(
-        //     this.previousOperand
-        //   )} ${this.operation}`;
-        //     }
+        this.currentOperandTextElement.innerText = this.getDisplayNumber(
+            this.currentOperand
+        );
+        if (this.operation != null) {
+            this.previousOperandTextElement.innerText = `${this.getDisplayNumber(
+        this.previousOperand
+      )} ${this.operation}`;
+        } else {
+            this.previousOperandTextElement.innerText = this.previousOperand;
+        }
+    }
+    getDisplayNumber(number) {
+        const stringNum = number.toString();
+        const interDigits = parseFloat(stringNum.split("." [0]));
+        const decimalDigits = stringNum.split(".")[1];
+        let integerDisplay;
+        if (isNaN(interDigits)) {
+            integerDisplay = "";
+        } else {
+            integerDisplay = interDigits.toLocaleString("en", {
+                maximumFractionDigits: 0,
+            });
+        }
+        if (decimalDigits != null) {
+            return `${integerDisplay}.${decimalDigits}`;
+        } else {
+            return integerDisplay;
+        }
     }
 }
 const calculator = new Calculator(
@@ -92,5 +115,13 @@ operators.forEach((operatorbtn) => {
 });
 equal.addEventListener("click", () => {
     calculator.compute();
+    calculator.updateDisplay();
+});
+allClear.addEventListener("click", () => {
+    calculator.clear();
+    calculator.updateDisplay();
+});
+deleteBtn.addEventListener("click", () => {
+    calculator.delete();
     calculator.updateDisplay();
 });
